@@ -7,8 +7,9 @@ import { z } from "zod";
 import db from "./db.js";
 
 const app = express();
-const HOST = "127.0.0.1";
-const PORT = 3001;
+const HOST = "0.0.0.0";
+const PORT =
+  process.env.PORT || 3001;
 
 // Local-development configuration only. Never use MemoryStore for production.
 app.disable("x-powered-by");
