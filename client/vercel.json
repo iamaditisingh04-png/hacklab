@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://hacklab-backend-aditi.onrender.com/api/$1"
+    }
+  ]
+}
