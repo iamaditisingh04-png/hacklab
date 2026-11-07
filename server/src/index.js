@@ -222,6 +222,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: "Unexpected server error." });
 });
 
+app.get("/api/health", (req, res) => {
+  res.json({ status: "OK", message: "HackLab backend is running!" });
+});
+
 app.listen(PORT, HOST, () => {
   console.log(`HackLab API listening locally at http://${HOST}:${PORT}`);
 });
