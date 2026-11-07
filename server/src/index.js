@@ -7,6 +7,7 @@ import { z } from "zod";
 import db from "./db.js";
 
 const app = express();
+app.set("trust proxy", 1);
 const HOST = "0.0.0.0";
 const PORT =
   process.env.PORT || 3001;
@@ -35,8 +36,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    sameSite: "strict",
-    secure: false, // localhost HTTP only; set true behind HTTPS in production
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",// localhost HTTP only; set true behind HTTPS in production
     maxAge: 1000 * 60 * 60 * 2
   }
 }));
@@ -70,7 +71,11 @@ function requireAuth(req, res, next) {
 app.use((req, res, next) => {
   const mutation = ["POST", "PUT", "PATCH", "DELETE"].includes(req.method);
   const origin = req.get("origin");
-  if (mutation && origin && !["http://127.0.0.1:5173", "http://localhost:5173"].includes(origin)) {
+  if (mutation && origin && ![
+  "http://127.0.0.1:5173",
+  "http://localhost:5173",
+  "https://hacklab-rho.vercel.app"
+].includes(origin)) {
     return res.status(403).json({ error: "Unexpected request origin." });
   }
   next();
